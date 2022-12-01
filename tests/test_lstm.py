@@ -66,11 +66,13 @@ class CartPoleNoVelEnv(CartPoleEnv):
             enable_critic_lstm=True,
             lstm_hidden_size=4,
             lstm_kwargs=dict(dropout=0.5),
+            n_lstm_layers=2,
         ),
         dict(
             enable_critic_lstm=False,
             lstm_hidden_size=4,
             lstm_kwargs=dict(dropout=0.5),
+            n_lstm_layers=2,
         ),
     ],
 )
@@ -95,11 +97,13 @@ def test_cnn(policy_kwargs):
             enable_critic_lstm=True,
             lstm_hidden_size=4,
             lstm_kwargs=dict(dropout=0.5),
+            n_lstm_layers=2,
         ),
         dict(
             enable_critic_lstm=False,
             lstm_hidden_size=4,
             lstm_kwargs=dict(dropout=0.5),
+            n_lstm_layers=2,
         ),
     ],
 )
@@ -134,10 +138,9 @@ def test_run(env):
         env,
         n_steps=16,
         seed=0,
-        create_eval_env=True,
     )
 
-    model.learn(total_timesteps=32, eval_freq=16)
+    model.learn(total_timesteps=32)
 
 
 def test_run_sde():
@@ -146,13 +149,12 @@ def test_run_sde():
         "Pendulum-v1",
         n_steps=16,
         seed=0,
-        create_eval_env=True,
         sde_sample_freq=4,
         use_sde=True,
         clip_range_vf=0.1,
     )
 
-    model.learn(total_timesteps=200, eval_freq=150)
+    model.learn(total_timesteps=200)
 
 
 @pytest.mark.parametrize(
@@ -164,11 +166,13 @@ def test_run_sde():
             enable_critic_lstm=True,
             lstm_hidden_size=4,
             lstm_kwargs=dict(dropout=0.5),
+            n_lstm_layers=2,
         ),
         dict(
             enable_critic_lstm=False,
             lstm_hidden_size=4,
             lstm_kwargs=dict(dropout=0.5),
+            n_lstm_layers=2,
         ),
     ],
 )
