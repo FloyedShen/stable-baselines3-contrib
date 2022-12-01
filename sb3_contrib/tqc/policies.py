@@ -3,6 +3,14 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import gym
 import torch as th
+
+from functools import partial
+from braincog.base.node.node import LIFNode, ReLUNode
+from braincog.model_zoo.base_module import BaseModule
+from braincog.model_zoo.darts.model import MlpCell
+from braincog.model_zoo.darts.genotypes import mlp1, mlp2
+from einops import rearrange
+
 from stable_baselines3.common.distributions import SquashedDiagGaussianDistribution, StateDependentNoiseDistribution
 from stable_baselines3.common.policies import BaseModel, BasePolicy
 from stable_baselines3.common.preprocessing import get_action_dim
@@ -87,6 +95,16 @@ class Actor(BasePolicy):
         action_dim = get_action_dim(self.action_space)
         latent_pi_net = create_mlp(features_dim, -1, net_arch, activation_fn)
         self.latent_pi = nn.Sequential(*latent_pi_net)
+
+        # self.latent_pi = MlpCell(
+        #     genotype=mlp1,
+        #     C=net_arch[0],
+        #     input_dim=features_dim,
+        #     output_dim=-1,
+        #     step=10,
+        #     activation_fn=LIFNode,
+        # )
+
         last_layer_dim = net_arch[-1] if len(net_arch) > 0 else features_dim
 
         if sde_net_arch is not None:
